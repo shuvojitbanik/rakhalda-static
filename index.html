@@ -2,34 +2,246 @@
 <html>
 <head>
     <title>Rakhalda Shop</title>
+
     <style>
-        body { font-family: Arial; }
-        .products { display: flex; flex-wrap: wrap; }
-        .product { border: 1px solid #ccc; margin:10px; padding:10px; width:200px; text-align:center; }
-        .product img { width:100%; height:150px; object-fit: cover; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-top: 30px;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .product {
+            background: white;
+            width: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .product:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .product img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .product h3 {
+            margin: 15px 0 5px;
+            color: #222;
+        }
+
+        .product p {
+            color: #555;
+            font-size: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: #0070f3;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            background: #0058c7;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: #999;
+        }
+
+        .close-btn:hover {
+            background: #666;
+        }
     </style>
 </head>
+
 <body>
+
     <h1>Welcome to Rakhalda Shop</h1>
+
     <div class="products">
+
         <div class="product">
             <img src="images/product1.png" alt="Product 1">
             <h3>Product 1</h3>
             <p>$29.99</p>
-            <a href="product/1.html">See Details</a>
+
+            <a class="btn" href="product/1.html">See Details</a>
+
+            <button class="btn" onclick="openBuyModal('Product 1')">
+                Buy Now
+            </button>
         </div>
+
         <div class="product">
             <img src="images/product2.png" alt="Product 2">
             <h3>Product 2</h3>
             <p>$49.99</p>
-            <a href="product/2.html">See Details</a>
+
+            <a class="btn" href="product/2.html">See Details</a>
+
+            <button class="btn" onclick="openBuyModal('Product 2')">
+                Buy Now
+            </button>
         </div>
+
         <div class="product">
             <img src="images/product3.png" alt="Product 3">
             <h3>Product 3</h3>
             <p>$39.99</p>
-            <a href="product/3.html">See Details</a>
+
+            <a class="btn" href="product/3.html">See Details</a>
+
+            <button class="btn" onclick="openBuyModal('Product 3')">
+                Buy Now
+            </button>
         </div>
+
     </div>
+
+    <!-- BUY MODAL -->
+
+    <div class="modal" id="buyModal">
+
+        <div class="modal-content">
+
+            <h2>Buy Product</h2>
+
+            <form id="buyForm">
+
+                <input
+                    type="text"
+                    id="buyerName"
+                    placeholder="Enter your name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="buyerMobile"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+                <button class="btn" type="submit">
+                    Confirm Order
+                </button>
+
+                <button
+                    type="button"
+                    class="btn close-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let selectedProduct = "";
+
+        function openBuyModal(productName) {
+            selectedProduct = productName;
+            document.getElementById("buyModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("buyModal").style.display = "none";
+        }
+
+        document.getElementById("buyForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            const name = document.getElementById("buyerName").value;
+            const mobile = document.getElementById("buyerMobile").value;
+
+            alert(
+                "Order Confirmed!\n\n" +
+                "Product: " + selectedProduct + "\n" +
+                "Name: " + name + "\n" +
+                "Mobile: " + mobile + "\n\n" +
+                "Seller will contact you soon."
+            );
+
+            closeModal();
+
+            document.getElementById("buyForm").reset();
+
+        });
+
+    </script>
+
 </body>
 </html>
