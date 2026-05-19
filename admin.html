@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Rakhalda Shop</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            margin:0;
+            padding:20px;
+        }
+
+        h1{
+            text-align:center;
+            color:#222;
+        }
+
+        .container{
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            margin-bottom:20px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:10px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:#0070f3;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0058c7;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table th,
+        table td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
+
+        table th{
+            background:#0070f3;
+            color:white;
+        }
+
+        img{
+            width:80px;
+            border-radius:5px;
+        }
+
+        .delete-btn{
+            background:red;
+        }
+
+        .delete-btn:hover{
+            background:darkred;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Rakhalda Admin Panel</h1>
+
+    <!-- ADD PRODUCT -->
+
+    <div class="card">
+
+        <h2>Add Product</h2>
+
+        <input type="text" id="productName" placeholder="Product Name">
+
+        <input type="text" id="productPrice" placeholder="Product Price">
+
+        <input type="text" id="productImage" placeholder="Image URL (images/product1.png)">
+
+        <input type="text" id="productDescription" placeholder="Product Description">
+
+        <button onclick="addProduct()">
+            Add Product
+        </button>
+
+    </div>
+
+    <!-- PRODUCT LIST -->
+
+    <div class="card">
+
+        <h2>Products</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="productTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- ORDERS -->
+
+    <div class="card">
+
+        <h2>Orders</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Mobile</th>
+                    <th>Product</th>
+                </tr>
+            </thead>
+
+            <tbody id="orderTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+    // PRODUCTS
+
+    let products = JSON.parse(localStorage.getItem("products")) || [
+
+        {
+            name:"Product 1",
+            price:"29.99",
+            image:"images/product1.png",
+            description:"Cool product 1"
+        },
+
+        {
+            name:"Product 2",
+            price:"49.99",
+            image:"images/product2.png",
+            description:"Cool product 2"
+        },
+
+        {
+            name:"Product 3",
+            price:"39.99",
+            image:"images/product3.png",
+            description:"Cool product 3"
+        }
+
+    ];
+
+    // ORDERS
+
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+    // RENDER PRODUCTS
+
+    function renderProducts(){
+
+        let table = document.getElementById("productTable");
+
+        table.innerHTML = "";
+
+        products.forEach((product,index)=>{
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        <img src="${product.image}">
+                    </td>
+
+                    <td>${product.name}</td>
+
+                    <td>$${product.price}</td>
+
+                    <td>${product.description}</td>
+
+                    <td>
+
+                        <button class="delete-btn"
+                        onclick="deleteProduct(${index})">
+
+                            Delete
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+        localStorage.setItem("products",JSON.stringify(products));
+
+    }
+
+    // ADD PRODUCT
+
+    function addProduct(){
+
+        let name = document.getElementById("productName").value;
+
+        let price = document.getElementById("productPrice").value;
+
+        let image = document.getElementById("productImage").value;
+
+        let description = document.getElementById("productDescription").value;
+
+        if(name === "" || price === "" || image === ""){
+
+            alert("Please fill all fields");
+
+            return;
+
+        }
+
+        products.push({
+
+            name,
+            price,
+            image,
+            description
+
+        });
+
+        renderProducts();
+
+        document.getElementById("productName").value = "";
+
+        document.getElementById("productPrice").value = "";
+
+        document.getElementById("productImage").value = "";
+
+        document.getElementById("productDescription").value = "";
+
+    }
+
+    // DELETE PRODUCT
+
+    function deleteProduct(index){
+
+        products.splice(index,1);
+
+        renderProducts();
+
+    }
+
+    // RENDER ORDERS
+
+    function renderOrders(){
+
+        let table = document.getElementById("orderTable");
+
+        table.innerHTML = "";
+
+        orders.forEach((order)=>{
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>${order.name}</td>
+
+                    <td>${order.mobile}</td>
+
+                    <td>${order.product}</td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+    renderProducts();
+
+    renderOrders();
+
+</script>
+
+</body>
+</html>
